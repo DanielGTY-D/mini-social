@@ -1,0 +1,71 @@
+.header-container {
+	padding: 0rem 2rem;
+	width: 100%;
+	align-self: flex-start;
+}
+.banner {
+	position: relative;
+	height: 0;
+	width: 100%;
+	padding-top: 56%;
+}
+.banner-img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	object-fit: cover;
+	width: 100%;
+	height: 100%;
+}
+.info {
+	position: relative;
+	top: -8rem;
+	width: fit-content;
+}
+.username {
+	background: white;
+	margin: 0;
+	padding: 0.5rem 1rem;
+	border-radius: 0 1rem 0rem 0rem;
+}
+.bio {
+	margin: 0;
+	background: white;
+	font-weight: 500;
+	padding: 0.5rem 1rem;
+}
+.follow {
+	display: flex;
+	gap: 3rem;
+    padding: 0 1rem;
+}
+.followers {
+	font-weight: 600;
+	color: var(--brown-600);
+	span {
+		color: black;
+	}
+}
+.following {
+	font-weight: 600;
+	color: var(--brown-600);
+	span {
+		color: black;
+	}
+}
+.update-profile {
+    border: none;
+    background-color: transparent;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    outline: 1px solid var(--sand-400);
+    transition: all 0.4s ease-in-out;
+    margin-left: 1rem;
+
+    &:hover {
+        outline: none;
+        background-color: var(--sand-400);
+        color: white;
+    }
+}

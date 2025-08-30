@@ -1,0 +1,76 @@
+.header {
+	box-shadow: var(--shadow-xl);
+	padding: 1rem 4rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 40;
+    background: white;
+}
+
+.logo {
+	border-radius: 20rem;
+	overflow: hidden;
+	height: 7rem;
+	width: 7rem;
+}
+.logo-img {
+	object-fit: cover;
+}
+.search-bar {
+	width: 33.333%;
+}
+.search-bar-input {
+	border: 1px solid var(--sand-400);
+	outline: none;
+	padding: 0.5rem 1rem;
+	border-radius: 1rem;
+    width: 100%;
+}
+.opt {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.main-content {
+    display: flex;
+    align-items: center;
+    margin: 4rem 0;
+}
+.aside {
+    border-right: 2px solid var(--sand-400);
+    padding: 2.5rem;
+    height: 100%;
+    position: sticky;
+    top: 10rem;
+    left: 0;
+    align-self: flex-start;
+}
+.links-list {
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.link {
+    list-style: none;
+    background: linear-gradient(to right, var(--sand-400) 30%, transparent) 100%;
+    background-position: 100%;
+    background-size: 50rem;
+    transition: background-position 0.5s ease-in-out;
+    padding: 0.25rem 0.5rem;
+
+    &:hover {
+        background-position: 50%;
+    }
+
+    a {
+        display: block;
+        width: 100%;
+    }
+}
