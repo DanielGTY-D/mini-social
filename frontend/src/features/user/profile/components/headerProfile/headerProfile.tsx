@@ -2,30 +2,40 @@ import { useEffect, useState } from 'react';
 import useProfile from '../../hooks/useProfile';
 import styles from './headerProfile.module.css';
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import UpdateUserModal from '../updateUserModal/UpdateUserModal';
 
 const HeaderProfile = () => {
+    const { id } = useParams()
     const navigate = useNavigate();
-    const { getUser } = useProfile();
+    const { getUser, getUserByID } = useProfile();
     const [openModal, setOpenModal] = useState(false);
+    // const [profileID, setProfileID] = useState<string | undefined>();
     const isLogged = localStorage.getItem("AUTH_TOKEN");
 
-    const { data, isLoading, isError, error } = useQuery({
-        queryKey: ['user'],
-        queryFn: getUser,
-        refetchOnWindowFocus: false,
-    })
 
-    useEffect(() => {
-        if (!isLogged) {
-            navigate("/home");
-        }
-    })
 
     const handleOpenModal = () => {
         setOpenModal(!openModal)
     }
+
+    const { data, isLoading, isError, error } = useQuery({
+        queryKey: id ? ['user', id] : ["user"],
+        queryFn: () => (id ? getUserByID(id) : getUser()),
+        refetchOnWindowFocus: false,
+        enabled: true,
+    })
+
+    console.log(data)
+
+    useEffect(() => {
+        // setProfileID(id);
+
+        if (!isLogged) {
+            navigate("/home");
+        }
+        // handleProfileID(id)
+    }, [isLogged])
 
     return (
         <>
@@ -42,7 +52,7 @@ const HeaderProfile = () => {
 
                                 <p className={styles['bio']}>{data.bio}</p>
 
-                                <div className={styles.follow}>
+                                <div className={styles['social-info']}>
                                     <p className={styles.followers}><span>Followers: </span>{data.followers.length}</p>
                                     <p className={styles.following}><span>Following: </span>{data.following.length}</p>
                                 </div>
@@ -50,7 +60,15 @@ const HeaderProfile = () => {
                         )
                     }
 
-                    <button className={styles['update-profile']} onClick={handleOpenModal}>{openModal ? "Cerrar Ventana" : "Actualizar perfil"}</button>
+                    <div className={styles['opts-container']}>
+                        {
+                            id !== undefined && (
+                                <button className={styles['follow-btn']}>Follow</button>
+                            )
+                        }
+                    </div>
+
+                    {id === undefined && <button className={styles['update-profile']} onClick={handleOpenModal}>{openModal ? "Cerrar Ventana" : "Actualizar perfil"}</button>}
 
                     {
                         openModal && (
@@ -58,6 +76,8 @@ const HeaderProfile = () => {
                         )
                     }
                 </div>
+
+
             </div>
         </>
     )

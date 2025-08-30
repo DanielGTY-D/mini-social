@@ -20,6 +20,21 @@ const useProfile = () => {
 		}
 	};
 
+	const getUserByID = async (userID: string) => {
+		try {
+			const {data} = await API.get(`/user/get/${userID}`);
+			const results = UserSchema.safeParse(data);
+
+			if(results.success) {
+				return results.data;
+			}
+		} catch (error) {
+						if (isAxiosError(error) && error.response) {
+				throw new Error(error.response.data.error);
+			}
+		}
+	}
+
 	const updateProfile = async (updateUser: updatedUserInfo) => {
 		try {
 			const {data} = await API.patch("/user/update", updateUser)
@@ -33,6 +48,7 @@ const useProfile = () => {
 
 	return {
         getUser,
+		getUserByID,
 		updateProfile
     };
 };

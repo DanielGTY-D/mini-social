@@ -34,10 +34,10 @@
 	font-weight: 500;
 	padding: 0.5rem 1rem;
 }
-.follow {
+.social-info {
 	display: flex;
 	gap: 3rem;
-    padding: 0 1rem;
+	padding: 0 1rem;
 }
 .followers {
 	font-weight: 600;
@@ -54,18 +54,37 @@
 	}
 }
 .update-profile {
-    border: none;
-    background-color: transparent;
-    padding: 0.5rem 1rem;
-    border-radius: 1rem;
-    cursor: pointer;
-    outline: 1px solid var(--sand-400);
-    transition: all 0.4s ease-in-out;
-    margin-left: 1rem;
+	border: none;
+	background-color: transparent;
+	padding: 0.5rem 1rem;
+	border-radius: 1rem;
+	cursor: pointer;
+	outline: 1px solid var(--sand-400);
+	transition: all 0.4s ease-in-out;
+	margin-left: 1rem;
 
-    &:hover {
-        outline: none;
-        background-color: var(--sand-400);
-        color: white;
-    }
+	&:hover {
+		outline: none;
+		background-color: var(--sand-400);
+		color: white;
+	}
+}
+.opts-container {
+	margin-left: 1rem;
+}
+.follow-btn {
+	border: none;
+	transition: all 0.4s ease-in-out;
+	padding: 0.5rem 4rem;
+	width: fit-content;
+	outline: 2px solid var(--sand-400);
+	border-radius: 1rem;
+	transition: all 0.4s ease-in-out;
+	cursor: pointer;
+
+	&:hover {
+		outline: transparent;
+		background-color: var(--sand-400);
+		color: white;
+	}
 }
