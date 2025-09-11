@@ -3,7 +3,7 @@ import colors from "colors";
 import User from "../models/User";
 import { randomUser } from "../utils/randomUser";
 import { comparePassword, hashPassword } from "../utils/hashPassword";
-import { verificationToken } from '../utils/verificationToken';
+import { verificationToken } from "../utils/verificationToken";
 import { sendVerificationEmail } from "../services/nodemailer";
 import { generateJWT } from "../utils/JWT";
 
@@ -34,7 +34,7 @@ export const register = async (req: Request, res: Response) => {
 		await sendVerificationEmail(email, token);
 
 		// guardar el usuario en BD
-		newUser.save();
+		await newUser.save();
 
 		res.json(
 			"Cuenta creada correctamente, revisa tu email para verificar tu cuenta"
@@ -44,7 +44,6 @@ export const register = async (req: Request, res: Response) => {
 		// console.log(colors.red("Error del servidor"));
 	}
 };
-
 export const verifyAccount = async (req: Request, res: Response) => {
 	const { token } = req.params;
 	try {
@@ -59,7 +58,7 @@ export const verifyAccount = async (req: Request, res: Response) => {
 		user.emailVerified = true;
 		user.verificationToken = "";
 
-		user.save();
+		await user.save();
 
 		res.json("Usuario verificado correctamente");
 	} catch (error) {
@@ -117,7 +116,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
 		user.password = await hashPassword(new_password);
 
-		user.save();
+		await user.save();
 
 		res.json("Password actualizado correctamente");
 	} catch (error) {
@@ -128,21 +127,16 @@ export const resetPassword = async (req: Request, res: Response) => {
 	try {
 		const { password } = req.body;
 		const { id } = req.user;
-		const user = await User.findById(id)
+		const user = await User.findById(id);
 
 		// resetear el password
 		user.password = await hashPassword(password);
 
-		user.save();
+	    await user.save();
 
-		res.json("Password actualizado correctamente")
+		res.json("Password actualizado correctamente");
 	} catch (error) {
 		console.log(colors.red("Error del servidor"));
 	}
 };
-// export const getUser = (req: Request, res: Response) => {
-// 	try {
-// 	} catch (error) {
-// 		console.log(colors.red("Error del servidor"));
-// 	}
-// };
+

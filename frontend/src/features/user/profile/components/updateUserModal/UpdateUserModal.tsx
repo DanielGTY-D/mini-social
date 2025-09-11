@@ -3,40 +3,34 @@ import styles from './updateUserModal.module.css'
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import useProfile from '../../hooks/useProfile';
-import { updatedUserInfo } from '../../models/user';
+import type { updatedUserInfo } from '../../models/user.model';
+import { useState } from 'react';
 
 const UpdateUserModal = ({ isOpen }: { isOpen: boolean }) => {
     const queryClient = useQueryClient();
     const user = queryClient.getQueryData<updatedUserInfo>(["user"]);
-    const { updateProfile } = useProfile()
+    const { updateProfile, uplodaProfilePhoto } = useProfile()
+    const [pathURL, setPathURL] = useState('');
 
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             username: user?.username,
-            avatar: user?.avatar,
             bio: user?.bio
         }
     })
 
-    const mutation = useMutation({
-        mutationFn: (formData: updatedUserInfo) => updateProfile(formData),
-        onSuccess: (data) => {
-            toast.success(data)
-
-            queryClient.invalidateQueries({queryKey: ['user']})
-        },
-        onError: (error: Error) => {
-            toast.error(error.message);
+    const handleChangePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            uploadProfilePhotoMutation.mutate(e.target.files[0]);
         }
-    })
-
+    }
 
     const handleUserUpdate = (formData: updatedUserInfo) => {
 
         if (formData.username === user?.username) {
             formData = {
                 username: "",
-                avatar: formData.avatar,
+                avatar: pathURL ? pathURL : "",
                 bio: formData.bio
             }
             mutation.mutate(formData)
@@ -46,7 +40,27 @@ const UpdateUserModal = ({ isOpen }: { isOpen: boolean }) => {
         mutation.mutate(formData);
     }
 
+    const uploadProfilePhotoMutation = useMutation({
+        mutationFn: (file: File) => uplodaProfilePhoto(file),
+        onSuccess: (data) => {
+            setPathURL(data.pathUrl)
+        },
+        onError: (err: Error) => {
+            toast.error(err.message)
+        }
+    })
 
+    const mutation = useMutation({
+        mutationFn: (formData: updatedUserInfo) => updateProfile(formData),
+        onSuccess: (data) => {
+            toast.success(data)
+
+            queryClient.invalidateQueries({ queryKey: ['user'] })
+        },
+        onError: (error: Error) => {
+            toast.error(error.message);
+        }
+    })
 
     return (
         <div className={`${styles['form-container']} ${isOpen && styles.active}`}>
@@ -71,17 +85,12 @@ const UpdateUserModal = ({ isOpen }: { isOpen: boolean }) => {
                 <div className={styles.field}>
                     <label className={styles['label']} htmlFor="avatar">Avatar</label>
                     <input
-                        className={styles["input"]}
-                        type="text"
+                        id='avatar'
+                        className={`${styles["input"]} ${styles["input--upload"]}`}
+                        type="file"
                         placeholder=''
-                        {...register("avatar", {})}
+                        onChange={handleChangePhoto}
                     />
-
-                    {errors.avatar &&
-                        (<p className={styles.error}>
-                            {errors.avatar.message}
-                        </p>)
-                    }
                 </div>
                 <div className={styles.field}>
                     <label className={styles['label']} htmlFor="bio">Biografia</label>
@@ -104,7 +113,7 @@ const UpdateUserModal = ({ isOpen }: { isOpen: boolean }) => {
                     }
                 </div>
 
-                <input className={styles.submit} type='submit' value={"Actualizar"} />
+                <input className={styles.submit} type='submit' value={"Actualizar Perfil"} />
             </form>
         </div>
     )

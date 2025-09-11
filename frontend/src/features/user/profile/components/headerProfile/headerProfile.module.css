@@ -1,13 +1,11 @@
 .header-container {
-	padding: 0rem 2rem;
-	width: 100%;
 	align-self: flex-start;
 }
 .banner {
 	position: relative;
 	height: 0;
 	width: 100%;
-	padding-top: 56%;
+	padding-top: 46%;
 }
 .banner-img {
 	position: absolute;
@@ -21,16 +19,15 @@
 	position: relative;
 	top: -8rem;
 	width: fit-content;
+	background: white;
+	border-radius: 0 1rem 0 0;
 }
 .username {
-	background: white;
 	margin: 0;
 	padding: 0.5rem 1rem;
-	border-radius: 0 1rem 0rem 0rem;
 }
 .bio {
 	margin: 0;
-	background: white;
 	font-weight: 500;
 	padding: 0.5rem 1rem;
 }
@@ -62,6 +59,7 @@
 	outline: 1px solid var(--sand-400);
 	transition: all 0.4s ease-in-out;
 	margin-left: 1rem;
+	margin-top: 2rem;
 
 	&:hover {
 		outline: none;

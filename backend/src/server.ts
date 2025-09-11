@@ -2,6 +2,7 @@ import express, { json } from 'express';
 import dotenv from 'dotenv';
 import authRouter from './routes/authRoutes'
 import userRouter from './routes/userRoutes';
+import postRouter from './routes/postRoutes';
 import morgan from 'morgan';
 import cors from 'cors';
 import { connectDB } from './config/db';
@@ -26,6 +27,7 @@ connectDB()
 // aqui las rutas
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
+app.use("/api/post", postRouter);
 
 
 export default app

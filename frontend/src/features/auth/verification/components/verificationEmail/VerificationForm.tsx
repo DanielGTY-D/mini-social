@@ -1,6 +1,6 @@
 import styles from "./verficationForm.module.css";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import useVerification from "../../hooks/useVerification";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";

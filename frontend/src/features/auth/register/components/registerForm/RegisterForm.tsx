@@ -1,10 +1,10 @@
+import styles from './registerForm.module.css';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { useMutation } from 'react-query';
-import styles from './registerForm.module.css';
+import { useMutation } from '@tanstack/react-query';
 import type { auth } from '../../../../../types/auth';
 import useRegister from '../../hooks/useRegister';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 
 const RegisterForm = () => {
@@ -92,7 +92,7 @@ const RegisterForm = () => {
             </form>
 
             <div>
-                <a className={styles.link} href="#">Ya tienes una cuenta? <span>Inicia sesion</span></a>
+                <Link className={styles.link} to={"/auth/login"} >Ya tienes una cuenta? <span>Inicia sesion</span></Link>
             </div>
         </div>
     )

@@ -1,14 +1,16 @@
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import styles from './loginForm.module.css';
 import type { auth } from '../../../../types/auth';
 import useLogin from '../hooks/useLogin';
+import { useNavigate } from 'react-router';
 
 
 
 const LoginForm = () => {
-    const { loginUser } = useLogin()
+    const { loginUser } = useLogin();
+    const navigate = useNavigate();
     const defaultValues = {
         email: "",
         password: ""
@@ -22,11 +24,16 @@ const LoginForm = () => {
         onSuccess: (data) => {
             toast.success("Iniciando sesion");
             localStorage.setItem("AUTH_TOKEN", data);
+
+            setTimeout(() => {
+                navigate("/home")
+            }, 1000)
         },
         onError: (data: Error) => {
             toast.error(data.message);
         },
     })
+
 
     const handleRegister = (formData: auth) => {
         mutation.mutate(formData);
@@ -84,7 +91,7 @@ const LoginForm = () => {
                     }
                 </div>
 
-                <input className={styles.button} type='submit' value={"Iniciar Sesion"} />
+                <input className={styles.button} type='submit' value={"Iniciar Sesion"} disabled={mutation.isPending ? true : false}/>
             </form>
 
             <div>

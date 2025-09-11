@@ -1,9 +1,42 @@
 import { ToastContainer } from 'react-toastify'
 import styles from './mainLayout.module.css'
-import { Link, Outlet } from 'react-router'
+import { Link, Outlet, useNavigate } from 'react-router'
+import { useQuery } from '@tanstack/react-query'
+import useProfile from '../../features/user/profile/hooks/useProfile'
+import { useEffect, useState } from 'react'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+
 
 const MainLayout = () => {
-    const isLogged = localStorage.getItem("AUTH_TOKEN")
+    const { getUser } = useProfile()
+    const [isLogged, setIsLogged] = useState(false);
+    const token = localStorage.getItem("AUTH_TOKEN")
+    const navigate = useNavigate();
+
+    const handleCloseSesion = () => {
+        localStorage.removeItem("AUTH_TOKEN");
+    }
+
+    const handleChange = (value) => {
+        navigate(`${value}`)
+    }
+
+    const { data } = useQuery({
+        queryKey: ["user"],
+        queryFn: getUser,
+        refetchOnWindowFocus: false,
+        enabled: isLogged ? true : false,
+    })
+
+    useEffect(() => {
+        if (token) { setIsLogged(true) } else { setIsLogged(false); }
+    }, [token])
 
     return (
         <>
@@ -22,11 +55,15 @@ const MainLayout = () => {
                     isLogged ? (
 
                         <div className={styles.opt}>
-                            <Link to="/user/profile">Perfil</Link>
+                            <Link to="/admin/profile"><p>{data && data.username}</p></Link>
+
+
+
+                            <button className={styles["close-sesion"]} onClick={handleCloseSesion}>Cerrar Sesion</button>
                         </div>
                     ) : (
 
-                        <div>
+                        <div className={styles.opt}>
                             <Link to="/auth/register">Registrarse</Link>
                             <Link to="/auth/login">Iniciar sesion</Link>
                         </div>
@@ -41,7 +78,7 @@ const MainLayout = () => {
                             <Link to={"/home"}>Inicio</Link>
                         </li>
                         <li className={styles.link}>
-                            <Link to={""}>Mi Perfil</Link>
+                            <Link to={"/admin/profile"}>Mi Perfil</Link>
                         </li>
                         <li className={styles.link}>
                             <Link to={""}>Mensajes</Link>
@@ -49,11 +86,20 @@ const MainLayout = () => {
                         <li className={styles.link}>
                             <Link to={""}>Notificaciones</Link>
                         </li>
-                        <li className={styles.link}>
-                            <Link to={""}>Notificaciones</Link>
-                        </li>
                     </ul>
                 </aside>
+
+                <Select onValueChange={handleChange}>
+                    <SelectTrigger  className="w-[180px] absolute -top-15 right-[2rem] md:invisible">
+                        <SelectValue placeholder="Home" />
+                    </SelectTrigger>
+                    <SelectContent >
+                        <SelectItem value="/home" className='text-lg'>Inicio</SelectItem>
+                        <SelectItem value="/admin/profile" className='text-lg'>Mi Perfil</SelectItem>
+                        <SelectItem value="/" className='text-lg'>Mensajes</SelectItem>
+                        <SelectItem value="/" className='text-lg'>Notificaciones</SelectItem>
+                    </SelectContent>
+                </Select>
 
                 <Outlet />
             </div>

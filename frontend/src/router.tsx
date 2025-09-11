@@ -13,14 +13,15 @@ import VerificationEmail from './views/verificationEmail'
 import Home from './views/home'
 import MainLayout from './layout/main/mainLayout'
 import Profile from './views/Profile'
+import SocialGraph from './views/SocialGraph'
 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-
       <ReactQueryDevtools  />
+
       <BrowserRouter>
         <Routes>
           <Route path='auth' element={<AuthLayout />}>
@@ -35,9 +36,11 @@ createRoot(document.getElementById('root')!).render(
 
           <Route path='admin' element={<MainLayout />}>
             <Route path='profile/:id?' element={<Profile />} />
+            <Route path='social-graph/:id?' element={<SocialGraph />}/>
           </Route>
         </Routes>
       </BrowserRouter>
+      
     </QueryClientProvider>
   </StrictMode>,
 )

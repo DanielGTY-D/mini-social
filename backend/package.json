@@ -23,12 +23,15 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@types/formidable": "^3.4.5",
     "bcrypt": "^6.0.0",
+    "cloudinary": "^2.7.0",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
+    "formidable": "^3.5.4",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.0",
     "morgan": "^1.10.1",

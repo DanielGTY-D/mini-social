@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { body } from "express-validator";
 import { authenticate, handleInputErrors } from "../middleware/auth";
-import { getFollowingByID } from "../controllers/userController";
+import { getFollowingByID, uploadProfilePhoto } from "../controllers/userController";
 import {
 	getUser,
 	getUserByID,
@@ -53,4 +53,7 @@ router.get("/following", authenticate, getFollowing);
 //  de otro usuario
 router.get("/:id/followers", authenticate, getFollowersByID);
 router.get("/:id/following", authenticate, getFollowingByID);
+
+// 
+router.post("/upload/image", authenticate, uploadProfilePhoto);
 export default router;

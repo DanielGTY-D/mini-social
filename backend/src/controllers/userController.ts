@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import User from "../models/User";
-import { ObjectId, Schema } from "mongoose";
+import formidable from "formidable";
+import cloudinary from "../config/cloudinary";
 
 export const getUser = async (req: Request, res: Response) => {
 	try {
@@ -47,12 +48,41 @@ export const updateUser = async (req: Request, res: Response) => {
 		user.username = username || user.username;
 		user.avatar = avatar || user.avatar;
 		user.bio = bio || user.bio;
-		user.save();
+		await user.save();
 
 		res.json("Perfil actualizado correctamente");
 	} catch (error) {
 		// console.log(error);
 		res.status(500).json({ error: "Error del servidor" });
+	}
+};
+export const uploadProfilePhoto = (req: Request, res: Response) => {
+	try {
+		const form = formidable({
+			multiples: false,
+		});
+
+		form.parse(req, (err, fields, files) => {
+			// console.log(files.file[0]);
+
+			cloudinary.uploader.upload(
+				files.file[0].filepath,
+				async function (error, result) {
+					if (error) {
+						const error = new Error(
+							"Hubo un error al subir la image"
+						);
+						res.status(500).json({ error: error.message });
+						return;
+					}
+					if (result) {
+						res.json({ pathUrl: result.secure_url });
+					}
+				}
+			);
+		});
+	} catch (error) {
+		res.status(500).json({ error: "Hubo un error en el servidor" });
 	}
 };
 export const deleteUser = async (req: Request, res: Response) => {
@@ -65,7 +95,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 			return;
 		}
 
-		user.deleteOne();
+		await user.deleteOne();
 
 		res.json("Cuenta eliminada correctamente");
 	} catch (error) {
@@ -94,8 +124,8 @@ export const followUser = async (req: Request, res: Response) => {
 		user.following.push(userToFollow.id);
 		userToFollow.followers.push(user.id);
 
-		user.save();
-		userToFollow.save();
+		await user.save();
+		await userToFollow.save();
 
 		res.json(`Siguendo a ${userToFollow.username}`);
 	} catch (error) {
@@ -131,10 +161,10 @@ export const unfollowUser = async (req: Request, res: Response) => {
 
 		// res.json({user, userToUnfollow});
 
-		user.save();
-		userToUnfollow.save();
+		await user.save();
+		await userToUnfollow.save();
 
-		res.json(`Dejando de seguir a ${userToUnfollow}`);
+		res.json(`Dejando de seguir a ${userToUnfollow.username}`);
 	} catch (error) {
 		// console.log(error);
 		res.status(500).json({ error: "Error del servidor" });
@@ -180,7 +210,7 @@ export const getFollowersByID = async (req: Request, res: Response) => {
 			res.status(404).json({ error: error.message });
 			return;
 		}
-		console.log(req.user.id);
+
 		res.json((await user).followers);
 	} catch (error) {
 		// console.log(error);
@@ -226,7 +256,7 @@ export const getFollowingByID = async (req: Request, res: Response) => {
 			res.status(404).json({ error: error.message });
 			return;
 		}
-		console.log(req.user.id);
+		
 		res.json((await user).following);
 	} catch (error) {
 		// console.log(error);

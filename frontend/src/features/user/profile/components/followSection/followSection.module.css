@@ -1,0 +1,35 @@
+.follow-section {
+	padding: 0 2rem;
+	width: 100%;
+}
+.social-container {
+}
+.social-header {
+	display: flex;
+	gap: 1rem;
+	position: relative;
+	width: fit-content;
+
+	&::after {
+		content: "";
+		width: calc(50% - 0.5rem);
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		border-bottom: 2px solid var(--sand-400);
+		transition: transform 0.3s ease-in-out; /* 👈 aquí la magia */
+		transform: translateX(0%);
+	}
+
+	&.active::after {
+		transform: translateX(calc(100% + 1rem)); /* 👈 se desliza al 2do tab */
+	}
+}
+.social-link {
+	font-weight: 600;
+	font-family: var(--secondary-font);
+	cursor: pointer;
+	transition: all 0.3s ease-in-out;
+	border: 1px solid rgba(94, 94, 94, 0.472);
+	padding: 0.5rem 1rem;
+}
